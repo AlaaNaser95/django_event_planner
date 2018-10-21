@@ -1,0 +1,21 @@
+{%extends "base.html"%}
+
+{% load crispy_forms_tags %}
+{%block content%}
+	<h1>{{event.title}}</h1>
+	<h3>description: {{event.description}}</h3>
+	<h3>location: {{event.location}}</h3>
+	<h3>date: {{event.date}}</h3>
+	<h3>time: {{event.time}}</h3>
+	<h3>seats: {{event.seats}}</h3>
+	<form action="{% url 'event-detail' event.id %}" method='POST'>
+		{% csrf_token %}
+        {{form|crispy}}
+        <input class = "btn btn-primary btn-xl rounded-pill mt-5"  type="submit" value="Book">
+		</form>
+	</li><br>
+	{% if request.user == event.creator %}
+		<a href="{% url 'update-event' event.id %}">Edit Event</a>
+	{% endif %}
+
+{% endblock %}

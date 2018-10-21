@@ -1,16 +1,16 @@
 {%extends "base.html"%}
 {%block content%}
-<br>
-<br>
-<br>
-<br>
+
 <br>
 <br>
 <h1>My events</h1>
-<ul>
+
 {% for event in created_events%}
+	<ul>
 	<li> {{event.title}}</li>
-	<li> {{event.description}}</li><br>
+	<li> {{event.description}}</li>
+	<a href="{% url 'event-detail' event.id %}"><li>details</li></a>
+	</ul><br>
 {% endfor %}
 
 <a href="{%url 'create-event' %}">Create event</a>

@@ -13,3 +13,9 @@ class Event(models.Model):
 
 	def __str__(self):
 		return self.title
+
+class Book(models.Model):
+	booker= models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+	event= models.ForeignKey(Event, default=1, on_delete=models.CASCADE)
+	tickets=models.PositiveIntegerField(default=1)
+

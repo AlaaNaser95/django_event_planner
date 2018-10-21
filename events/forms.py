@@ -19,11 +19,18 @@ class UserLogin(forms.Form):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = '__all__'
+        exclude=['creator']
 
-        # widgets={
-        # 	'date': forms.DateInput(),
-        # 	'time': forms.TimeInput(),
-        # }
+        widgets={
+            'date': forms.DateInput(),
+            'time': forms.TimeInput(),
+        }
+
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields=['tickets']
+
+
 
 

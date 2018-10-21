@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from .forms import *
 from django.contrib import messages
+from django.http import JsonResponse
 def home(request):
     return render(request, 'home.html')
 
@@ -87,3 +88,56 @@ def create(request):
         "form":form
     }
     return render(request, "create.html", context )
+
+
+def detail(request, event_id):
+    event = Event.objects.get(id=event_id)
+    # student=classroom.student_set.all().order_by('name','-exam_grade')
+    form=BookForm()
+    if request.method == 'POST':
+        form=BookForm(request.POST)
+        if form.is_valid():
+            book=form.save(commit=False)
+            book.booker=request.user
+            book.event=event
+            form.save()
+            messages.success(request, "Successfully booked!")
+    context = {
+        "event": event,  
+        "form":form  
+        }
+    return render(request, 'detail.html', context)
+
+
+
+
+
+def update(request, event_id):
+    event = Event.objects.get(id=event_id)
+    if request.user.is_authenticated and request.user==event.creator:
+        form = EventForm(instance=event)
+        if request.method == "POST":
+            form = EventForm(request.POST,instance=event)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Successfully Edited!")
+                return redirect('dashboard')
+            print (form.errors)
+    
+    context = {
+        "form":form,
+        "event": event,   
+        }
+    return render(request, 'update.html', context)
+
+def upcommingList(request):
+    if request.user.is_authenticated:
+        events=Event.objects.all()
+        context={
+            "events": events,
+        }
+        return render(request, 'upcommingEvents.html', context)
+
+
+
+
