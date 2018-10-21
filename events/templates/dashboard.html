@@ -4,7 +4,8 @@
 <br>
 <br>
 <h1>My events</h1>
-
+<div class="row">
+	<div class="col col-6">
 {% for event in created_events%}
 	<ul>
 	<li> {{event.title}}</li>
@@ -14,4 +15,21 @@
 {% endfor %}
 
 <a href="{%url 'create-event' %}">Create event</a>
+<br>
+<br>
+<br>
+</div>
+<div class="col col-6">
+	<h1>Attended</h1>
+	
+<!-- 	{% for event in previous_events %}
+		<ul>
+			<li>{{event.title}}</li>
+			<li>{{event.date}}</li>
+			<li>{{event.location}}</li>
+		</ul>
+	{% endfor %} -->
+
+</div>
+</div>
 {% endblock %}

@@ -16,6 +16,28 @@
 	</li><br>
 	{% if request.user == event.creator %}
 		<a href="{% url 'update-event' event.id %}">Edit Event</a>
+		<h2>Bookings</h2>
+		<table>
+			<tr>
+				<td>booking id</td>
+				<td>username</td>
+				<td>tickets</td>
+			</tr>			
+		{%for book in bookings%}
+			<tr>
+				<td>{{book.id}}</td>
+				<td>{{book.booker}}</td>
+				<td>{{book.tickets}}</td>
+			</tr>
+		{% endfor %}
+	</table>
+
 	{% endif %}
+		<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 
 {% endblock %}

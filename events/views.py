@@ -4,6 +4,8 @@ from django.views import View
 from .forms import *
 from django.contrib import messages
 from django.http import JsonResponse
+import datetime 
+from itertools import chain
 def home(request):
     return render(request, 'home.html')
 
@@ -64,8 +66,12 @@ def dashboard(request):
     if request.user.is_anonymous:
         return redirect('login')
     created_events=Event.objects.filter(creator=request.user)
+    # previous_events=Event.objects.filter(date__lt=datetime.datetime.now())
+    # previous_events=chain(previous_events,Event.objects.filter(date=datetime.date.today(), time__lt=datetime.datetime.now()))
+
     context={
-        'created_events':created_events
+        'created_events':created_events,
+        # 'previous_events':previous_events,
     }
 
     return render(request, "dashboard.html",context)
@@ -93,6 +99,7 @@ def create(request):
 def detail(request, event_id):
     event = Event.objects.get(id=event_id)
     # student=classroom.student_set.all().order_by('name','-exam_grade')
+    bookings=Book.objects.filter(event=event)
     form=BookForm()
     if request.method == 'POST':
         form=BookForm(request.POST)
@@ -104,7 +111,8 @@ def detail(request, event_id):
             messages.success(request, "Successfully booked!")
     context = {
         "event": event,  
-        "form":form  
+        "form":form ,
+        "bookings": bookings,
         }
     return render(request, 'detail.html', context)
 
@@ -132,12 +140,12 @@ def update(request, event_id):
 
 def upcommingList(request):
     if request.user.is_authenticated:
-        events=Event.objects.all()
+        # events=Event.objects.all()
+        # events=Event.objects.filter(date__gte=datetime.date.today(), time__gte=datetime.datetime.now())
+        events=Event.objects.filter(date__gt=datetime.datetime.now())
+        events=chain(events,Event.objects.filter(date=datetime.date.today(), time__gte=datetime.datetime.now()))
         context={
             "events": events,
         }
         return render(request, 'upcommingEvents.html', context)
-
-
-
 
