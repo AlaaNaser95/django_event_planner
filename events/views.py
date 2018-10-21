@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
-from .forms import UserSignup, UserLogin
+from .forms import *
 from django.contrib import messages
 def home(request):
     return render(request, 'home.html')
@@ -60,4 +60,30 @@ class Logout(View):
         return redirect("login")
 
 def dashboard(request):
-    return render(request, "dashboard.html")
+    if request.user.is_anonymous:
+        return redirect('login')
+    created_events=Event.objects.filter(creator=request.user)
+    context={
+        'created_events':created_events
+    }
+
+    return render(request, "dashboard.html",context)
+
+def create(request):
+    if request.user.is_anonymous:
+        return redirect('login')
+    form=EventForm()
+    if request.method == "POST":
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event=form.save(commit=False)
+            event.creator=request.user
+            event.save()
+            messages.success(request, "Successfully Created!")
+            return redirect('dashboard')
+        print (form.errors)
+
+    context={
+        "form":form
+    }
+    return render(request, "create.html", context )
