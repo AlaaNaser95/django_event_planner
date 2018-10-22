@@ -2,42 +2,50 @@
 
 {% load crispy_forms_tags %}
 {%block content%}
-	<h1>{{event.title}}</h1>
-	<h3>description: {{event.description}}</h3>
-	<h3>location: {{event.location}}</h3>
-	<h3>date: {{event.date}}</h3>
-	<h3>time: {{event.time}}</h3>
-	<h3>seats: {{event.seats}}</h3>
-	<form action="{% url 'event-detail' event.id %}" method='POST'>
-		{% csrf_token %}
-        {{form|crispy}}
-        <input class = "btn btn-primary btn-xl rounded-pill mt-5"  type="submit" value="Book">
-		</form>
-	</li><br>
-	{% if request.user == event.creator %}
-		<a href="{% url 'update-event' event.id %}">Edit Event</a>
-		<h2>Bookings</h2>
-		<table>
-			<tr>
-				<td>booking id</td>
-				<td>username</td>
-				<td>tickets</td>
-			</tr>			
-		{%for book in bookings%}
-			<tr>
-				<td>{{book.id}}</td>
-				<td>{{book.booker}}</td>
-				<td>{{book.tickets}}</td>
-			</tr>
-		{% endfor %}
-	</table>
+<div class="container" >
 
-	{% endif %}
-		<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
+	<div class="card text-center">
+		<div class="card-body">
+			<h5 class="card-title">{{event.title}}</h5>
+			<p class="card-text">{{event.description}}</p>
+		    <p class="card-text">Location:{{event.location}}</p>
+		    <p class="card-text">Date & Time:{{event.date}} - {{event.time}}</p>
+		    <p class="card-text">({{event.seats}}) seats left!</p>
+		    {% if request.user == event.creator %}
+			<a href="{% url 'update-event' event.id %}" class="btn btn-primary">Edit Event</a>
+			{% endif %}
+		</div>
+		<div class="card-footer bg-secondary text-white">
+			<form  action="{% url 'event-detail' event.id %}" method='POST'>
+				{% csrf_token %}
+        		{{form}}
+        	<input type="submit" value="Book">
+			</form>
+	  	</div>
+	</div>
+
+{% if request.user == event.creator %}
+<br><br>
+<h2 style="text-align:center;">Bookings</h2>
+<table class="table table-dark">
+  <thead>
+    <tr>
+      <th scope="col">Book ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Tickets</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{%for book in bookings%}
+    <tr>
+      <th scope="row">{{book.id}}</th>
+      <td>{{book.booker.username}}</td>
+      <td>{{book.tickets}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}	
+</div>
 
 {% endblock %}

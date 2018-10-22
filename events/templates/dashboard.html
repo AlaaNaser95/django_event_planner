@@ -1,35 +1,84 @@
 {%extends "base.html"%}
 {%block content%}
+<div class="container">
 
-<br>
-<br>
-<h1>My events</h1>
 <div class="row">
-	<div class="col col-6">
-{% for event in created_events%}
-	<ul>
-	<li> {{event.title}}</li>
-	<li> {{event.description}}</li>
-	<a href="{% url 'event-detail' event.id %}"><li>details</li></a>
-	</ul><br>
-{% endfor %}
 
-<a href="{%url 'create-event' %}">Create event</a>
-<br>
-<br>
-<br>
+<div class="col col-6">
+	<h1>My events</h1>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Date</th>
+      <th scope="col"><a href="{%url 'create-event' %}">Create event</a></th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for event in created_events%}
+    <tr>
+      <th scope="row">{{event.title}}</th>
+      <td>{{event.date}}</td>
+      <td><a href="{% url 'event-detail' event.id %}">Details</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 </div>
 <div class="col col-6">
+	<div class="row">
+		<div class="col-12">
+	<h1>Upcoming</h1>
+	
+
+<table class="table table-dark">
+	 <thead>
+    <tr>
+      <th scope="col">Event</th>
+      <th scope="col">Tickets</th>
+    </tr>
+  </thead>
+{% for event in upcoming_events %}
+    <tr>
+      <td><a href="{% url 'event-detail' event.id %}">{{event.event.title}}</a></td>
+      <td>{{event.tickets}}</td>
+    </tr>
+    {% endfor %} 
+</table>
+	
+</div>
+	<div class="col-12">
 	<h1>Attended</h1>
 	
-	{% for event in previous_events %}
-		<ul>
-			<li>{{event.title}}</li>
-			<li>{{event.date}}</li>
-			<li>{{event.location}}</li>
-		</ul>
-	{% endfor %} 
 
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">event</th>
+      <th scope="col">description</th>
+      <th scope="col">location</th>
+      <th scope="col">Date&Time</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for event in previous_events %}
+    <tr>
+      <th scope="row">{{event.title}}</th>
+      <td>{{event.description}}</td>
+      <td>{{event.location}}</td>
+      <td>{{event.date}}<br>{{event.time}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+	 
+</div>
+
+
+
+<!--row--></div>
+</div>
 </div>
 </div>
 {% endblock %}

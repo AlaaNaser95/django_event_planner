@@ -8,8 +8,8 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('dashboard/', dashboard, name='dashboard'),
     path('create/', create, name='create-event'),
-    path('detail/<int:event_id>', detail, name='event-detail'),
-    path('update/<int:event_id>', update, name='update-event'),
+    path('detail/<int:event_id>/', detail, name='event-detail'),
+    path('update/<int:event_id>/', update, name='update-event'),
     path('events/', upcommingList , name='events'),
     
 ]

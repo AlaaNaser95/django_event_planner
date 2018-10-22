@@ -22,8 +22,8 @@ class EventForm(forms.ModelForm):
         exclude=['creator']
 
         widgets={
-            'date': forms.DateInput(),
-            'time': forms.TimeInput(),
+            'date': forms.DateInput(attrs={'type':"date"}),
+            'time': forms.TimeInput(attrs={'type':"time"}),
         }
 
 class BookForm(forms.ModelForm):

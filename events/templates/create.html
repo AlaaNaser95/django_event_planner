@@ -1,9 +1,11 @@
 {%extends "base.html"%}
 {% load crispy_forms_tags %}
 {%block content%}
+<div class="container">
 	<form action="{% url 'create-event' %}" method="POST">
         {% csrf_token %}
         {{form|crispy}}
         <input class = "btn btn-primary btn-xl rounded-pill mt-5" type="submit" value="Create">
     </form>
+</div>
 {% endblock %}

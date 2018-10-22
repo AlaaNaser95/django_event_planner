@@ -1,0 +1,16 @@
+body{
+	background-image: url('../img/background.jpg');
+    height: 100%; 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.padded{
+	padding-top: 110px ;
+	padding-bottom: 120px ;
+}
+.trans{
+	background-color:black;
+	opacity:0.95;
+	color: white;
+}
