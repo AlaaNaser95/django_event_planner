@@ -68,10 +68,15 @@ def dashboard(request):
     created_events=Event.objects.filter(creator=request.user)
     # previous_events=Event.objects.filter(date__lt=datetime.datetime.now())
     # previous_events=chain(previous_events,Event.objects.filter(date=datetime.date.today(), time__lt=datetime.datetime.now()))
-
+    # previous_books=Book.objects.filter(booker=request.user, event__date__lt=datetime.datetime.now())
+    previous_books=Book.objects.filter(booker=request.user, event__date__lt=datetime.datetime.today())
+    previous_books=chain(previous_books, Book.objects.filter(booker=request.user, event__date=datetime.date.today(), event__time__lt=datetime.datetime.now()))
+    previous_events = {previous_book.event for previous_book in previous_books}
+    # previous_events=union(previous_events,Event.objects.filter(date=datetime.date.today(), time__lt=datetime.datetime.now()), )
+    
     context={
         'created_events':created_events,
-        # 'previous_events':previous_events,
+        'previous_events':previous_events,
     }
 
     return render(request, "dashboard.html",context)
