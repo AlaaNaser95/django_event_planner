@@ -3,3 +3,4 @@ from .models import *
 
 admin.site.register(Event)
 admin.site.register(Book)
+admin.site.register(Follow)

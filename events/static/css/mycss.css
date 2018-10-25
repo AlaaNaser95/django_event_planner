@@ -1,5 +1,7 @@
 body{
 	background-image: url('../img/background.jpg');
+    /*background-image: url('https://i.ytimg.com/vi/60rqsh4Q89g/maxresdefault.jpg');*/
+    /*background-image: url('../img/background4.jpg');*/
     height: 100%; 
     background-position: center;
     background-repeat: no-repeat;
@@ -13,4 +15,57 @@ body{
 	background-color:black;
 	opacity:0.95;
 	color: white;
+}
+
+.black{
+	background-color: black;
+}
+.blacktrans{
+	background-color: black;
+	color: white;
+	opacity: 0.7;
+	
+}
+.blackcenter{
+	background-color: black;
+	color: white;
+	opacity: 0.7;
+	text-align: center;
+}
+.big{
+	font-size: 30px;
+	text-transform: uppercase;
+	text-align: center;
+	
+}
+.right{
+	font-size: 30px;
+	text-transform: uppercase;
+	text-align: center;
+}
+.trans2{
+	background-color:black;
+	opacity:0.8;
+	color: white;
+}
+.head{
+	background-color:black;
+}
+.pro{
+	
+	background-color: white;
+	opacity: 0.7;
+}
+.background{
+	background-image: url('../img/comp.jpeg');
+	/*background: black;*/
+	background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.9;
+}
+.white{
+	background-color: white;
+	text-align: center;
+	color: black;
 }

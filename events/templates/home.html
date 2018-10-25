@@ -3,20 +3,21 @@
 {% block content %}
 <header class=" text-center text-white">
   <div class="masthead-content">
-    <div class="container">
-      <h1 class="masthead-heading mb-0">All the events,</h1>
-      <h2 class="masthead-subheading mb-0">You could ever want...</h2>
+
+  <div class="container">
+      <div class= 'background padded'>
+      <h1 class="masthead-heading mb-0 ">All Technical Events & Workshops,</h1>
+      <h2 class="masthead-subheading mb-0">Create events, Book, Follow and More!</h2>
+
       {% if request.user.is_anonymous %}
         <a href="{% url 'signup' %}" class="btn btn-primary btn-xl rounded-pill mt-5">Sign up to find events!</a>
       {% else %}
         <a href="{% url 'events' %}" class="btn btn-primary btn-xl rounded-pill mt-5">Find events!</a>
       {% endif %}
-    </div>
+      </div>
+    
   </div>
-  <div class="bg-circle-1 bg-circle"></div>
-  <div class="bg-circle-2 bg-circle"></div>
-  <div class="bg-circle-3 bg-circle"></div>
-  <div class="bg-circle-4 bg-circle"></div>
+ 
 </header>
 
 

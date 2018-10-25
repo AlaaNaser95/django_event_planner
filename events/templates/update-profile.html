@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<header class=" text-center text-white ">
+  
+    <div class="container">
+        <div class="jumbotron ">
+          <h2 class="masthead-subheading mb-0">Edit Profile</h2>
+          <form action="{% url 'update-profile' %}" method="POST">
+            {% csrf_token %}
+            {{form|crispy}}
+            <input class = "btn btn-primary btn-xl rounded-pill mt-5" type="submit" value="Edit">
+          </form>
+      </div>
+    </div>
+  
+
+</header>
+{% endblock %}
