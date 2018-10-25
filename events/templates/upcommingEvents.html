@@ -24,7 +24,7 @@
 	<img class="card-img-top" src="{{event.image.url}}" alt="Card image cap">
   <div class="card-body">
     <h5 class="card-title">{{event.title}}</h5>
-    <p class="card-text">{{event.date}}</p>
+    <p class="card-text"><i class="far fa-calendar-alt"></i> {{event.date}}</p>
     <a href="{% url 'event-detail' event.id %}" class="btn btn-primary">More Details & Booking</a>
   </div>
 </div>
