@@ -15,7 +15,8 @@
 		    <p class="card-text"><strong><i class="fas fa-calendar-alt"></i> Date & Time:</strong><br>{{event.date}} - {{event.time}}</p>
 		    <p class="card-text"><strong>({{event.seats}}) seats left!</strong></p>
 		    {% if request.user == event.creator and comming  %}
-			<a href="{% url 'update-event' event.id %}" class="btn btn-primary">Edit Event</a>
+			<a href="{% url 'update-event' event.id %}" class="btn btn-info">Edit Event <i class="far fa-edit"></i></a>
+			<a href="{% url 'delete-event' event.id %}" class="btn btn-danger">Delete Event <i class="fas fa-trash-alt"></i></a>
 			{% endif %}
 		</div>
 		 {% if comming %} 

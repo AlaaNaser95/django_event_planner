@@ -8,9 +8,48 @@
     		<h6 class="card-subtitle mb-2 text-muted">{{user.email}}</h6>
 
     		{% if request.user == user %}
-    		<a href="{% url 'update-profile' %}" class="btn btn-info" >Edit Profile</a>
+    		<a href="{% url 'update-profile' %}" class="btn btn-info m-2" >Edit Profile</a>
+                
+
+
+<p>
+
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample1" aria-expanded="false" aria-controls="multiCollapseExample1" data-parent="#selector">
+   Followings
+        </button>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2" data-parent="#selector">
+   Followers
+        </button>
+</p>
+<div class="row">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+      <div class="card card-body">
+        {% for follow in following_list%}
+        <a href="{% url 'profile' follow.followed.id%}">{{follow.followed.username}}</a>
+    {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample2">
+      <div class="card card-body">
+        
+        {% for follow in follower_list%}
+        <a href="{% url 'profile' follow.follower.id%}">{{follow.followed.username}}</a>
+    {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     		{% else %}
     		<button class="btn btn-primary" id="follow-{{user.id}}" onclick="follow_org({{user.id}})">
+
     		 {% if user in following %}Following {% else %} Follow{% endif %}</button>
     		{% endif %}
   		</div>

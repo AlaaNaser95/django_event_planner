@@ -227,11 +227,15 @@ def upcommingList(request):
 def profilePage(request,user_id):
     user=User.objects.get(id=user_id)
     events=Event.objects.filter(creator=user)
+    following_list= Follow.objects.filter(follower=user)
+    follower_list= Follow.objects.filter(followed=user)
     following= [follow.followed  for follow in Follow.objects.filter(follower=request.user)]
     context={
         "user":user,
         "events":events,
         "following":following,
+        "following_list":following_list,
+        "follower_list":follower_list,
     }
     return render(request,"profile.html",context)
 
@@ -271,6 +275,16 @@ def cancelBooking(request, book_id):
     # if book.event.time < timezone.now().time: 
     book.delete()
     messages.success(request, "Successfully cancelled!")
+    
+    # messages.success(request, "Cancelling not available!!")
+
+    return redirect("dashboard")
+
+def deleteEvent(request, event_id):
+    event=Event.objects.get(id=event_id)
+    # if book.event.time < timezone.now().time: 
+    event.delete()
+    messages.success(request, "Successfully Deleted!")
     
     # messages.success(request, "Cancelling not available!!")
 

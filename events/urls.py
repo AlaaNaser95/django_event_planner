@@ -16,6 +16,6 @@ urlpatterns = [
     path('follow/<int:user_id>/', followOrganizer, name='follow'),
     # path('send-email/', sendemail, name='email'),
     path('book-cancel/<int:book_id>/', cancelBooking, name='cancel'),
-
+    path('event/delete/<int:event_id>', deleteEvent , name='delete-event'),
     # path('payment/', TapPayment.as_view(), name='pay'),
 ]
