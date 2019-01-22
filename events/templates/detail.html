@@ -3,7 +3,6 @@
 {% load crispy_forms_tags %}
 {%block content%}
 <div class="container" >
-
 	<div class="card text-center">
 		<div class="card-body">
 			<img class="card-img-top" style="height: 300px" src="{{event.image.url}}" alt="Card image cap">
@@ -11,12 +10,28 @@
 			<p class="card-text" ><strong><em><a href="{% url 'profile' event.creator.id %}" style="color: grey;">By, {{event.creator}}</a></em></strong></p>
 			<p class="card-text">{{event.description}}</p>
 			
-		    <p class="card-text"><strong><i class="fas fa-map-marker-alt"></i> Location: </strong><br>{{event.location}}</p>
-		    <p class="card-text"><strong><i class="fas fa-calendar-alt"></i> Date & Time:</strong><br>{{event.date}} - {{event.time}}</p>
-		    <p class="card-text"><strong>({{event.seats}}) seats left!</strong></p>
+		    <p class="card-text">
+		    	<strong>
+		    		<i class="fas fa-map-marker-alt"></i>
+		    		Location:
+		    	</strong>
+		    	<br>
+		    	{{event.location}}
+			</p>
+		    <p class="card-text">
+		    	<strong>
+		    	<i class="fas fa-calendar-alt"></i>
+		    	Date & Time:
+		    	</strong>
+		    	<br>
+		    	{{event.date}} - {{event.time}}
+		    </p>
+		    <p class="card-text">
+		    	<strong>({{event.seats}}) seats left!</strong>
+		    </p>
 		    {% if request.user == event.creator and comming  %}
-			<a href="{% url 'update-event' event.id %}" class="btn btn-info">Edit Event <i class="far fa-edit"></i></a>
-			<a href="{% url 'delete-event' event.id %}" class="btn btn-danger">Delete Event <i class="fas fa-trash-alt"></i></a>
+				<a href="{% url 'update-event' event.id %}" class="btn btn-info">Edit Event <i class="far fa-edit"></i></a>
+				<a href="{% url 'delete-event' event.id %}" class="btn btn-danger">Delete Event <i class="fas fa-trash-alt"></i></a>
 			{% endif %}
 		</div>
 		 {% if comming %} 
