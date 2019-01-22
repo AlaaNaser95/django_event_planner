@@ -76,16 +76,7 @@ def dashboard(request):
     created_events=Event.objects.filter(creator=request.user)
     previous_books=Book.objects.filter(booker=request.user, event__date__lte=datetime.datetime.today()).exclude( event__date=datetime.date.today(), event__time__gte=datetime.datetime.now())
     upcoming_books=Book.objects.filter(booker=request.user, event__date__gte=datetime.datetime.today()).exclude( event__date=datetime.date.today(), event__time__lt=datetime.datetime.now())
-    # previous_books=chain(previous_books, Book.objects.filter(booker=request.user, event__date=datetime.date.today(), event__time__lt=datetime.datetime.now()))
     previous_events = {previous_book.event for previous_book in previous_books}
-    # upcoming_events = {upcoming_book.event for upcoming_book in upcoming_books}
-    # tickets=sum(upcoming_books.values_list('tickets', flat=True))
-
-    # previous_events = previous_events.values_list("event",falt=True).distinct()
-    # upcoming_events = {upcoming_book.event for upcoming_book in upcoming_books}
-
-    # previous_events={previous_book.event for previous_book in Book.objects.filter(booker=request.user, event__date__lte=timezone.now(), event__time__lte=timezone.now())}
-    # upcoming_books=Book.objects.filter(booker=request.user, event__date__gte=timezone.now(), event__time__gte=timezone.now())
     
     
     context={
@@ -111,7 +102,6 @@ def create(request):
             sendemail(request.user,followers)
             messages.success(request, "Successfully Created!")
             return redirect('dashboard')
-        print (form.errors)
 
     context={
         "form":form
@@ -123,12 +113,7 @@ def detail(request, event_id):
     if request.user.is_anonymous:
         return redirect('login')
     event = Event.objects.get(id=event_id)
-    # student=classroom.student_set.all().order_by('name','-exam_grade')
     bookings=Book.objects.filter(event=event)
-    print(timezone.now())
-    print(event.date > timezone.now().date())
-    print(event.date == timezone.now().date())
-    print(event.time >= timezone.now().time())
     comming= (event.date > timezone.now().date() ) or (event.date == timezone.now().date() and event.time >= timezone.now().time()) 
     form=BookForm()
     if request.method == 'POST':
@@ -142,13 +127,12 @@ def detail(request, event_id):
                 book=form.save(commit=False)
                 book.booker=request.user
                 book.event=event
-                book.save()#############could have error
+                book.save()
                 event.seats=event.seats - int(request.POST.get('tickets'))
                 event.save()
                 bookemail(book)
                 messages.success(request, "Successfully booked!")
                 return redirect('events')
-            # messages.success(request, "Successfully booked!")
     context = {
         "event": event,  
         "form":form ,
@@ -194,7 +178,6 @@ def updateProfile(request):
             user=form.save(commit=False)
             user.set_password(user.password)
             user.save()
-            # login(request.user)
             messages.success(request, "Successfully Updated!")
             return redirect('dashboard')
         print (form.errors)
@@ -207,10 +190,7 @@ def updateProfile(request):
 def upcommingList(request):
     if request.user.is_anonymous:
         return redirect('login')
-        # events=Event.objects.all()
-        # events=Event.objects.filter(date__gte=datetime.date.today(), time__gte=datetime.datetime.now())
     events=Event.objects.filter(date__gte=datetime.datetime.now()).exclude(date=datetime.date.today(), time__lt=datetime.datetime.now())
-    # events=chain(events,Event.objects.filter(date=datetime.date.today(), time__gte=datetime.datetime.now()))
     query = request.GET.get('q')
     if query:
         events = events.filter(
@@ -272,75 +252,16 @@ def bookemail(book):
 
 def cancelBooking(request, book_id):
     book=Book.objects.get(id=book_id)
-    # if book.event.time < timezone.now().time: 
+    event=book.event
+    tickets=book.tickets
     book.delete()
+    event.seats=event.seats+tickets
+    event.save()
     messages.success(request, "Successfully cancelled!")
-    
-    # messages.success(request, "Cancelling not available!!")
-
     return redirect("dashboard")
 
 def deleteEvent(request, event_id):
     event=Event.objects.get(id=event_id)
-    # if book.event.time < timezone.now().time: 
     event.delete()
     messages.success(request, "Successfully Deleted!")
-    
-    # messages.success(request, "Cancelling not available!!")
-
     return redirect("dashboard")
-
-class TapPayment(View):
-    def pay_cart(self, request, user, order):
-        return self.pay(**{'customer': user,
-                           'qty': '1', 'price': order.total_price(),
-                           'isTest': testing_payment,
-                           'order_id': order.id})
-
-    def pay(self, *args, **kwargs):
-        if not kwargs.get('isTest'):
-            client = Client('https://www.gotapnow.com/webservice/PayGatewayService.svc?wsdl')
-        else:
-            client = Client('http://live.gotapnow.com/webservice/PayGatewayService.svc?wsdl')
-
-        payment_request = client.factory.create('ns0:PayRequestDC')
-
-        customer = kwargs.get('customer')
-
-        # Customer Info
-        payment_request.CustomerDC.Email = customer.email
-        payment_request.CustomerDC.Mobile = customer.phone_number
-        payment_request.CustomerDC.Name = '{} {}'.format(customer.first_name, customer.last_name)
-
-        # Merchant Info
-        if not kwargs.get('isTest'):
-            payment_request.MerMastDC.MerchantID = tap_merchant_id
-            payment_request.MerMastDC.UserName = tap_user
-            payment_request.MerMastDC.Password = tap_password
-            payment_request.MerMastDC.AutoReturn = 'Y'
-            payment_request.MerMastDC.ErrorURL = '{}/paymenterror'.format(website_url())
-            payment_request.MerMastDC.ReturnURL = '{}/receipt'.format(website_url())
-        else:
-            payment_request.MerMastDC.MerchantID = "1014"
-            payment_request.MerMastDC.UserName = 'test'
-            payment_request.MerMastDC.Password = "4l3S3T5gQvo%3d"
-            payment_request.MerMastDC.AutoReturn = 'N'
-            payment_request.MerMastDC.ErrorURL = '{}/paymenterror'.format(staging_url())
-            payment_request.MerMastDC.ReturnURL = '{}/receipt'.format(staging_url())
-
-        # Product Info
-        mapping = {'CurrencyCode': currency_code(), 'Quantity': kwargs.get('qty'),
-                   'UnitPrice': kwargs.get('price'),
-                   'TotalPrice': float(kwargs.get('qty')) * float(kwargs.get('price')),
-                   'UnitName': 'Order {}'.format(kwargs.get('order_id'))}
-        product_dc = {k: v for k, v in mapping.iteritems()}
-        payment_request.lstProductDC.ProductDC.append(product_dc)
-
-        response = client.service.PaymentRequest(payment_request)
-        details = "resmsg: {} status: {}".format(response.ResponseMessage, 'Pending')
-        Receipt.objects.get_or_create(reference_id=response.ReferenceID, details=details,
-                                      order=Order.objects.get(id=kwargs.get('order_id')),
-                                      total_price=(float(kwargs.get('qty')) * float(kwargs.get('price'))))
-
-        paymentUrl = "{}?ref={}".format(response.TapPayURL, response.ReferenceID)
-        return redirect(paymentUrl or '/paymenterror')
